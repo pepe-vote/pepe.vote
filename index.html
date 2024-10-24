@@ -92,14 +92,25 @@
         <button id="login-btn">Nostr Login</button>
       </div>  
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/nostr-zap@1.1.0"></script>
   </header>
   
   <main>
     <div class="vote-section" style="display:none;">
       <h2>Vote on Pepes!</h2>
       <label for="event-id">Click on the Pepe you like more!</label>
-      <img id="voteoption1-btn" />
-      <img id="voteoption2-btn" />
+            <button
+            data-npub="npub1vp8fdcyejd4pqjyrjk9sgz68vuhq7pyvnzk8j0ehlljvwgp8n6eqsrnpsw"
+            data-relays="wss://relay.damus.io,wss://relay.snort.social,wss://nostr.wine,wss://relay.nostr.band"
+            >
+                <img id="voteoption1-btn" />
+            </button>
+            <button 
+            data-npub="npub1vp8fdcyejd4pqjyrjk9sgz68vuhq7pyvnzk8j0ehlljvwgp8n6eqsrnpsw"
+            data-relays="wss://relay.damus.io,wss://relay.snort.social,wss://nostr.wine,wss://relay.nostr.band"
+            >
+                <img id="voteoption2-btn" />
+            </button>
     </div>
 
     <div class="leaderboard-section" style="display:none;">
