@@ -1,680 +1,686 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="shortcut icon" href="/logo.png" />
-        <link rel="icon" href="/logo.png" />
-        <title>Pepe.Vote</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
 
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #1a1a1a;
-                color: #ffffff;
-                min-height: 100vh;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/logo.png" />
+    <link rel="icon" href="/logo.png" />
+    <title>Pepe.Vote</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            nav {
-                background-color: #2c2c2c;
-                padding: 1rem;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
 
-            .nav-content {
-                max-width: 1200px;
-                margin: 0 auto;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        nav {
+            background-color: #2c2c2c;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-            .nav-links {
-                display: flex;
-                gap: 20px;
-            }
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .nav-links a {
-                color: #fff;
-                text-decoration: none;
-                padding: 0.5rem 1rem;
-                border-radius: 4px;
-                transition: background-color 0.3s;
-            }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
 
-            .nav-links a:hover {
-                background-color: #3c3c3c;
-            }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
 
-            header {
-                width: 100%;
-                padding: 1rem;
-                background-color: #333;
-            }
+        .nav-links a:hover {
+            background-color: #3c3c3c;
+        }
 
-            .header-content {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        header {
+            width: 100%;
+            padding: 1rem;
+            background-color: #333;
+        }
 
-            h1 {
-                color: #fff;
-                margin: 0;
-            }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            main {
-                max-width: 1200px;
-                margin: 2rem auto;
-                padding: 0 1rem;
-                text-align: center;
-            }
+        h1 {
+            color: #fff;
+            margin: 0;
+        }
 
-            .results-table {
-                width: 100%;
-                margin-top: 2rem;
-                border-collapse: collapse;
-                background-color: #2c2c2c;
-                border-radius: 8px;
-                overflow: hidden;
-            }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
 
-            .results-table th,
-            .results-table td {
-                padding: 1rem;
-                text-align: left;
-                border-bottom: 1px solid #3c3c3c;
-            }
+        .results-table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-            .results-table th {
-                background-color: #333;
-                font-weight: bold;
-            }
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #3c3c3c;
+        }
 
-            .results-table td img {
-                width: 100px;
-                height: 100px;
-                object-fit: contain;
-                border-radius: 4px;
-            }
+        .results-table th {
+            background-color: #333;
+            font-weight: bold;
+        }
 
-            .results-table tr:hover {
-                background-color: #363636;
-            }
+        .results-table td img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
 
-            button {
-                padding: 0.5rem 1rem;
-                background-color: #4caf50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-top: 10px;
-            }
+        .results-table tr:hover {
+            background-color: #363636;
+        }
 
-            button:hover {
-                background-color: #45a049;
-            }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-            #profile-pic {
-                width: 64px;
-                height: 64px;
-                border-radius: 50%;
-            }
-        </style>
-    </head>
-    <body>
-        <nav>
-            <div class="nav-content">
-                <h1>Pepe.Vote</h1>
-                <div class="nav-links">
-                    <a href="#" onclick="showVoting()">Vote</a>
-                    <a href="#" onclick="showLeaderboard()">Leaderboard</a>
-                    <div class="profile-pic-container" style="display: none">
-                        <img id="profile-pic" alt="User Profile Picture" />
-                    </div>
-                    <div class="login-btn-container">
-                        <button id="login-btn">Please Login</button>
-                    </div>
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #profile-pic {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-content">
+            <h1>Pepe.Vote</h1>
+            <div class="nav-links">
+                <a href="#" onclick="showVoting()">Vote</a>
+                <a href="#" onclick="showLeaderboard()">Leaderboard</a>
+                <div class="profile-pic-container" style="display: none">
+                    <img id="profile-pic" alt="User Profile Picture" />
+                </div>
+                <div class="login-btn-container">
+                    <button id="login-btn">Please Login</button>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main>
-            <div class="vote-section" style="display: none">
-                <h2>Vote on Pepes!</h2>
-                <label for="event-id">Click on the Pepe you like more!</label>
-                <div
-                    style="
+    <main>
+        <div class="vote-section" style="display: none">
+            <h2>Vote on Pepes!</h2>
+            <label for="event-id">Click on the Pepe you like more!</label>
+            <div style="
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         gap: 20px;
                         flex-wrap: wrap;
                         margin-top: 2rem;
-                    "
-                >
-                    <img
-                        id="voteoption1-btn"
-                        style="
+                    ">
+                <img id="voteoption1-btn" style="
                             cursor: pointer;
                             width: min(40vw, 300px);
                             height: min(40vw, 300px);
                             object-fit: contain;
-                        "
-                    />
-                    <img
-                        id="voteoption2-btn"
-                        style="
+                        " />
+                <img id="voteoption2-btn" style="
                             cursor: pointer;
                             width: min(40vw, 300px);
                             height: min(40vw, 300px);
                             object-fit: contain;
-                        "
-                    />
-                </div>
-                <div>
-                    <button
-                        data-npub="npub13tn44ckhtf76rmg32us9njawye6wa0rlkt975c9c8kv0rstzy9xs9rhwpt"
-                        data-relays="wss://relay.primal.net"
-                    >
-                        Zap the devs!
-                    </button>
-                </div>
+                        " />
             </div>
-
-            <div class="leaderboard-section" style="display: none">
-                <h2>Leaderboard Results</h2>
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Pepe</th>
-                            <th>Votes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-results"></tbody>
-                </table>
+            <div>
+                <button data-npub="npub13tn44ckhtf76rmg32us9njawye6wa0rlkt975c9c8kv0rstzy9xs9rhwpt"
+                    data-relays="wss://relay.primal.net">
+                    Zap the devs!
+                </button>
             </div>
-        </main>
+        </div>
 
-        <script>
-            // Global variables
-            const kindMetadata = 0;
-            const kindOption = 3939;
-            const kindVote = 1212;
-            const tagFilter = "pepevote";
-            const namespace = "vote.pepe";
-            const namespaceOption = "voteoptions";
-            const altVote =
-                "A vote for pepe is a vote for humanity and human kind. Vote today and vote often at https://pepe.vote";
-            const readRelays = [
-                "wss://relay.damus.io",
-                "wss://relay.primal.net",
-            ];
-            const writeRelays = [
-                "wss://relay.damus.io",
-                "wss://relay.primal.net",
-            ];
-            let tallied = [];
-            let availableOptions = [];
-            let option1id = "";
-            let option2id = "";
-            let brokenImageUrl = "broken";
+        <div class="leaderboard-section" style="display: none">
+            <h2>Leaderboard Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Pepe</th>
+                        <th>Votes</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-results"></tbody>
+            </table>
+        </div>
+    </main>
 
-            function getImageFromEventByID(id) {
-                for (let o of availableOptions) {
-                    if (o.id == id) {
-                        return getImageFromEvent(o);
-                    }
+    <script>
+        // Global variables
+        const kindMetadata = 0;
+        const kindOption = 3939;
+        const kindVote = 1212;
+        const tagFilter = "pepevote";
+        const namespace = "vote.pepe";
+        const namespaceOption = "voteoptions";
+        const altVote =
+            "A vote for pepe is a vote for humanity and human kind. Vote today and vote often at https://pepe.vote";
+        const readRelays = [
+            "wss://relay.damus.io",
+            "wss://relay.primal.net",
+        ];
+        const writeRelays = [
+            "wss://relay.damus.io",
+            "wss://relay.primal.net",
+        ];
+        let tallied = [];
+        let availableOptions = [];
+        let option1id = "";
+        let option2id = "";
+        let brokenImageUrl = "broken";
+
+        function getImageFromEventByID(id) {
+            for (let o of availableOptions) {
+                if (o.id == id) {
+                    return getImageFromEvent(o);
                 }
-                if (window.DEBUG) {
-                    console.log(
-                        `Event with id ${id} not present in available options. Unable to get image url`,
-                    );
-                }
-                return brokenImageUrl;
             }
-
-            function getImageFromEvent(o) {
-                for (let t of o.tags) {
-                    if (t.length < 2) continue;
-                    if (t[0] == "r") return t[1];
-                }
-                return "";
-            }
-
-            async function setupVoteOptions() {
-                console.log("setup vote options");
-                let o1 = document.getElementById("voteoption1-btn");
-                let o2 = document.getElementById("voteoption2-btn");
-                if (!availableOptions || availableOptions.length == 0) {
-                    console.log("images not loaded");
-                    o1.src = brokenImageUrl;
-                    o1.style.cursor = "not-allowed";
-                    o2.src = brokenImageUrl;
-                    o2.style.cursor = "not-allowed";
-                    option1id = "";
-                    option2id = "";
-                    return;
-                }
-                console.log(availableOptions);
-                const opt1Idx = Math.floor(
-                    Math.random() * availableOptions.length,
+            if (window.DEBUG) {
+                console.log(
+                    `Event with id ${id} not present in available options. Unable to get image url`,
                 );
-                const opt2Idx = Math.floor(
-                    Math.random() * availableOptions.length,
-                );
-                const opt1 = availableOptions[opt1Idx];
-                const opt2 = availableOptions[opt2Idx];
-                option1id = opt1.id;
-                const image = getImageFromEvent(opt1);
-                console.log(image);
-                o1.src = image;
-                o1.style.cursor = "pointer";
-                option2id = opt2.id;
-                o2.src = getImageFromEvent(opt2);
-                o2.style.cursor = "pointer";
             }
+            return brokenImageUrl;
+        }
 
-            async function fetchProfile(pubKey) {
-                return new Promise((resolve, reject) => {
-                    let profile = null;
-                    readRelays.forEach((relay) => {
-                        const ws = new WebSocket(relay);
-                        ws.onopen = () => {
-                            ws.send(
-                                JSON.stringify([
-                                    "REQ",
-                                    "profile",
-                                    {
-                                        kinds: [kindMetadata],
-                                        authors: [pubKey],
-                                    },
-                                ]),
-                            );
-                        };
-                        ws.onmessage = (event) => {
-                            const message = JSON.parse(event.data);
-                            if (message[0] === "EVENT" && message.length >= 2) {
-                                profile = JSON.parse(message[2].content);
-                                resolve(profile);
-                                ws.send(JSON.stringify(["CLOSE", "profile"]));
-                                ws.close();
-                            }
-                        };
-                        ws.onerror = (err) => {
-                            console.error(
-                                `Error fetching profile from ${relay}:`,
-                                err,
-                            );
-                            reject(err);
-                        };
-                        ws.onclose = () => {
-                            if (window.DEBUG)
-                                console.log(`Closed connection to ${relay}`);
-                        };
-                    });
-                });
+        function getImageFromEvent(o) {
+            for (let t of o.tags) {
+                if (t.length < 2) continue;
+                if (t[0] == "r") return t[1];
             }
+            return "";
+        }
 
-            async function fetchOptions() {
-                return new Promise((resolve, reject) => {
-                    console.log("fetching options promise....");
-                    let options = [];
-                    let optionids = [];
-                    readRelays.forEach((relay) => {
-                        const ws = new WebSocket(relay);
-                        ws.onopen = () => {
-                            let filter = { kinds: [kindOption], limit: 5000 };
-                            ws.send(JSON.stringify(["REQ", "options", filter]));
-                        };
-                        ws.onmessage = (event) => {
-                            const message = JSON.parse(event.data);
-                            if (message[0] === "EVENT" && message.length >= 2) {
-                                let voteoption = message[2];
-                                if (!optionids.includes(voteoption.id)) {
-                                    let hasNamespace = false;
-                                    let hasLabel = false;
-                                    let hasHashtag = false;
-                                    for (let te of voteoption.tags) {
-                                        if (te.length < 2) continue;
-                                        if (te[0] == "L" && te[1] == namespace)
-                                            hasNamespace = true;
-                                        if (
-                                            te[0] == "l" &&
-                                            te[1] == namespaceOption
-                                        )
-                                            hasLabel = true;
-                                        if (te[0] == "t" && te[1] == tagFilter)
-                                            hasHashtag = true;
-                                    }
-                                    if (
-                                        hasNamespace &&
-                                        hasLabel &&
-                                        hasHashtag
-                                    ) {
-                                        options.push(voteoption);
-                                        optionids.push(voteoption.id);
-                                    }
-                                }
-                            }
-                            if (message[0] === "EOSE") {
-                                ws.send(JSON.stringify(["CLOSE", "options"]));
-                                ws.close();
-                            }
-                        };
-                        ws.onerror = (err) => {
-                            console.error(
-                                `Error fetching options from ${relay}:`,
-                                err,
-                            );
-                            reject(err);
-                        };
-                        ws.onclose = () => {
-                            if (window.DEBUG)
-                                console.log(`Closed connection to ${relay}`);
-                        };
-                    });
-                    setTimeout(() => {
-                        resolve(options);
-                    }, 2000);
-                });
+        async function setupVoteOptions() {
+            console.log("setup vote options");
+            let o1 = document.getElementById("voteoption1-btn");
+            let o2 = document.getElementById("voteoption2-btn");
+            if (!availableOptions || availableOptions.length == 0) {
+                console.log("images not loaded");
+                o1.src = brokenImageUrl;
+                o1.style.cursor = "not-allowed";
+                o2.src = brokenImageUrl;
+                o2.style.cursor = "not-allowed";
+                option1id = "";
+                option2id = "";
+                return;
             }
+            console.log(availableOptions);
+            const opt1Idx = Math.floor(
+                Math.random() * availableOptions.length,
+            );
+            const opt2Idx = Math.floor(
+                Math.random() * availableOptions.length,
+            );
+            const opt1 = availableOptions[opt1Idx];
+            const opt2 = availableOptions[opt2Idx];
+            option1id = opt1.id;
+            const image = getImageFromEvent(opt1);
+            console.log(image);
+            o1.src = image;
+            o1.style.cursor = "pointer";
+            option2id = opt2.id;
+            o2.src = getImageFromEvent(opt2);
+            o2.style.cursor = "pointer";
+        }
 
-            async function fetchResults() {
-                return new Promise((resolve, reject) => {
-                    let results = [];
-                    let resultids = [];
-                    readRelays.forEach((relay) => {
-                        const ws = new WebSocket(relay);
-                        ws.onopen = () => {
-                            ws.send(
-                                JSON.stringify([
-                                    "REQ",
-                                    "results",
-                                    { kinds: [kindVote], limit: 5000 },
-                                ]),
-                            );
-                        };
-                        ws.onmessage = (event) => {
-                            const message = JSON.parse(event.data);
-                            if (message[0] === "EVENT" && message.length >= 2) {
-                                let result = message[2];
-                                if (!resultids.includes(result.id)) {
-                                    let hasNamespace = false;
-                                    let hasLabel = false;
-                                    let hasHashtag = false;
-                                    for (let te of result.tags) {
-                                        if (te.length < 2) continue;
-                                        if (te[0] == "L" && te[1] == namespace)
-                                            hasNamespace = true;
-                                        if (
-                                            te[0] == "l" &&
-                                            te[1] == namespaceOption
-                                        )
-                                            hasLabel = true;
-                                        if (te[0] == "t" && te[1] == tagFilter)
-                                            hasHashtag = true;
-                                    }
-                                    if (
-                                        hasNamespace &&
-                                        hasLabel &&
-                                        hasHashtag
-                                    ) {
-                                        results.push(result);
-                                        resultids.push(result.id);
-                                    }
-                                }
-                            }
-                            if (message[0] === "EOSE") {
-                                ws.send(JSON.stringify(["CLOSE", "results"]));
-                                ws.close();
-                            }
-                        };
-                        ws.onerror = (err) => {
-                            console.error(
-                                `Error fetching results from ${relay}:`,
-                                err,
-                            );
-                            reject(err);
-                        };
-                        ws.onclose = () => {
-                            if (window.DEBUG)
-                                console.log(`Closed connection to ${relay}`);
-                        };
-                    });
-                    setTimeout(() => {
-                        resolve(results);
-                    }, 2000);
-                });
-            }
-
-            async function fetchTallySort() {
-                let currentResults = await fetchResults();
-                let talliedEvents = [];
-                for (let result of currentResults) {
-                    for (let tag of result.tags) {
-                        if (tag.length > 0) {
-                            if (tag[0] != "e") continue;
-                            let eid = tag[1];
-                            let f = false;
-                            for (let te of talliedEvents) {
-                                if (te.eventId == eid) {
-                                    te.votecount = te.votecount + 1;
-                                    f = true;
-                                }
-                            }
-                            if (!f) {
-                                talliedEvents.push({
-                                    eventId: eid,
-                                    votecount: 1,
-                                });
-                            }
-                        }
-                    }
-                }
-                talliedEvents.sort((a, b) => b.votecount - a.votecount);
-                tallied = talliedEvents;
-            }
-
-            async function voteNote(choice1, choice2) {
-                if (!option1id || !option2id) {
-                    if (window.DEBUG)
-                        console.log(
-                            "Skipping voting as no event id for either option1 or option2",
-                        );
-                    return;
-                }
-                const voteNote = {
-                    kind: kindVote,
-                    tags: [
-                        ["e", choice1, choice2],
-                        ["t", tagFilter],
-                        ["L", namespace],
-                        ["l", namespaceOption],
-                        ["alt", altVote],
-                    ],
-                    content: "",
-                    created_at: Math.floor(Date.now() / 1000),
-                };
-                const signedEvent = await window.nostr.signEvent(voteNote);
-                const eventId = signedEvent.id;
-                writeRelays.forEach((relay) => {
+        async function fetchProfile(pubKey) {
+            return new Promise((resolve, reject) => {
+                let profile = null;
+                readRelays.forEach((relay) => {
                     const ws = new WebSocket(relay);
                     ws.onopen = () => {
-                        ws.send(JSON.stringify(["EVENT", signedEvent]));
+                        ws.send(
+                            JSON.stringify([
+                                "REQ",
+                                "profile",
+                                {
+                                    kinds: [kindMetadata],
+                                    authors: [pubKey],
+                                },
+                            ]),
+                        );
                     };
                     ws.onmessage = (event) => {
                         const message = JSON.parse(event.data);
-                        if (message[0] === "OK") {
-                            if (window.DEBUG)
-                                console.log(
-                                    `Event ${eventId} wrote successfully to ${relay}`,
-                                );
-                        } else {
-                            if (window.DEBUG)
-                                console.log(
-                                    `Event ${eventId} failed to write to ${relay}`,
-                                );
+                        if (message[0] === "EVENT" && message.length >= 2) {
+                            profile = JSON.parse(message[2].content);
+                            resolve(profile);
+                            ws.send(JSON.stringify(["CLOSE", "profile"]));
+                            ws.close();
                         }
                     };
                     ws.onerror = (err) => {
                         console.error(
-                            `WebSocket error writing on ${relay}:`,
+                            `Error fetching profile from ${relay}:`,
                             err,
                         );
+                        reject(err);
                     };
                     ws.onclose = () => {
                         if (window.DEBUG)
-                            console.log(`Connection to ${relay} closed`);
+                            console.log(`Closed connection to ${relay}`);
                     };
                 });
-                return eventId;
-            }
+            });
+        }
 
-            function showVoting() {
-                document.querySelector(".vote-section").style.display = "block";
-                document.querySelector(".leaderboard-section").style.display =
-                    "none";
-            }
 
-            function showLeaderboard() {
-                document.querySelector(".vote-section").style.display = "none";
-                document.querySelector(".leaderboard-section").style.display =
-                    "block";
-                updateLeaderboard();
-            }
+        async function fetchNostrEvents({
+            subscriptionId,
+            kind,
+            pageSize = 10,
+            until = Math.floor(Date.now() / 1000),
+            since = undefined
+        } = {}) {
+            return new Promise((resolve, reject) => {
+                let events = [];
+                let eventids = [];
+                let completedRelays = 0;
+                const totalRelays = readRelays.length;
 
-            function updateLeaderboard() {
-                const leaderboardResults = document.getElementById(
-                    "leaderboard-results",
-                );
-                while (leaderboardResults.firstChild) {
-                    leaderboardResults.removeChild(
-                        leaderboardResults.lastChild,
-                    );
+                readRelays.forEach((relay) => {
+                    const ws = new WebSocket(relay);
+
+                    ws.onopen = () => {
+                        console.log(`Opening connection to ${relay} with until=${until}`);
+                        let filter = {
+                            kinds: [kind],
+                            until,
+                            limit: pageSize
+                        };
+
+                        if (since) filter.since = since;
+
+                        ws.send(JSON.stringify(["REQ", subscriptionId, filter]));
+                    };
+
+                    ws.onmessage = (event) => {
+                        const message = JSON.parse(event.data);
+                        if (message[0] === "EVENT" && message.length >= 2) {
+                            let nostrEvent = message[2];
+
+                            if (!eventids.includes(nostrEvent.id)) {
+                                let hasNamespace = false;
+                                let hasLabel = false;
+                                let hasHashtag = false;
+
+                                for (let te of nostrEvent.tags) {
+                                    if (te.length < 2) continue;
+                                    if (te[0] == "L" && te[1] == namespace)
+                                        hasNamespace = true;
+                                    if (te[0] == "l" && te[1] == namespaceOption)
+                                        hasLabel = true;
+                                    if (te[0] == "t" && te[1] == tagFilter)
+                                        hasHashtag = true;
+                                }
+
+                                if (hasNamespace && hasLabel && hasHashtag) {
+                                    events.push(nostrEvent);
+                                    eventids.push(nostrEvent.id);
+                                }
+                            }
+                        }
+
+                        if (message[0] === "EOSE") {
+                            console.log(`Received EOSE from ${relay}`);
+                            completedRelays++;
+                            if (completedRelays === totalRelays) {
+                                console.log('All relays completed, handling completion');
+                                handleCompletion();
+                            }
+                        }
+                    };
+
+                    ws.onerror = (err) => {
+                        console.error(
+                            `Error fetching from ${relay}:`,
+                            err,
+                        );
+                        completedRelays++;
+                        if (completedRelays === totalRelays) {
+                            handleCompletion();
+                        }
+                    };
+
+                    ws.onclose = () => {
+                        if (window.DEBUG)
+                            console.log(`Closed connection to ${relay}`);
+                    };
+                });
+
+                const handleCompletion = () => {
+                    // Sort by timestamp
+                    events.sort((a, b) => b.created_at - a.created_at);
+
+                    console.log(`Total events collected: ${events.length}`);
+
+                    // Close all connections after we've processed everything
+                    readRelays.forEach((relay) => {
+                        const ws = new WebSocket(relay);
+                        if (ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify(["CLOSE", subscriptionId]));
+                            ws.close();
+                        }
+                    });
+
+                    // Return all events we've collected
+                    resolve(events);
+                };
+
+                // Maintain the timeout as a fallback
+                setTimeout(() => {
+                    console.log('Timeout reached, handling completion');
+                    handleCompletion();
+                }, 2000);
+            });
+        }
+
+        async function fetchOptions({
+            pageSize = 500,
+            until = Math.floor(Date.now() / 1000)
+        } = {}) {
+            console.log(`Fetching options with until=${until}`);
+            const results = await fetchNostrEvents({
+                subscriptionId: "options",
+                kind: kindOption,
+                pageSize,
+                until
+            });
+            console.log(`Fetched ${results.length} options`);
+            return results;
+        }
+
+        async function fetchResults({
+            pageSize = 500,
+            until = Math.floor(Date.now() / 1000)
+        } = {}) {
+            const oneWeekAgo = Math.floor((Date.now() / 1000) - (7 * 24 * 60 * 60));
+
+            console.log(`Fetching results with until=${until}`);
+            const results = await fetchNostrEvents({
+                subscriptionId: "results",
+                kind: kindVote,
+                pageSize,
+                until,
+                since: oneWeekAgo
+            });
+            console.log(`Fetched ${results.length} results`);
+            return results;
+        }
+
+
+        async function fetchTallySort() {
+            let currentResults = await fetchResults();
+            let talliedEvents = [];
+            for (let result of currentResults) {
+                for (let tag of result.tags) {
+                    if (tag.length > 0) {
+                        if (tag[0] != "e") continue;
+                        let eid = tag[1];
+                        let f = false;
+                        for (let te of talliedEvents) {
+                            if (te.eventId == eid) {
+                                te.votecount = te.votecount + 1;
+                                f = true;
+                            }
+                        }
+                        if (!f) {
+                            talliedEvents.push({
+                                eventId: eid,
+                                votecount: 1,
+                            });
+                        }
+                    }
                 }
+            }
+            talliedEvents.sort((a, b) => b.votecount - a.votecount);
+            tallied = talliedEvents;
+        }
 
-                tallied.forEach((tally, index) => {
-                    const imageUrl = getImageFromEventByID(tally.eventId);
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
+        async function voteNote(choice1, choice2) {
+            if (!option1id || !option2id) {
+                if (window.DEBUG)
+                    console.log(
+                        "Skipping voting as no event id for either option1 or option2",
+                    );
+                return;
+            }
+            const voteNote = {
+                kind: kindVote,
+                tags: [
+                    ["e", choice1, choice2],
+                    ["t", tagFilter],
+                    ["L", namespace],
+                    ["l", namespaceOption],
+                    ["alt", altVote],
+                ],
+                content: "",
+                created_at: Math.floor(Date.now() / 1000),
+            };
+            const signedEvent = await window.nostr.signEvent(voteNote);
+            const eventId = signedEvent.id;
+            writeRelays.forEach((relay) => {
+                const ws = new WebSocket(relay);
+                ws.onopen = () => {
+                    ws.send(JSON.stringify(["EVENT", signedEvent]));
+                };
+                ws.onmessage = (event) => {
+                    const message = JSON.parse(event.data);
+                    if (message[0] === "OK") {
+                        if (window.DEBUG)
+                            console.log(
+                                `Event ${eventId} wrote successfully to ${relay}`,
+                            );
+                    } else {
+                        if (window.DEBUG)
+                            console.log(
+                                `Event ${eventId} failed to write to ${relay}`,
+                            );
+                    }
+                };
+                ws.onerror = (err) => {
+                    console.error(
+                        `WebSocket error writing on ${relay}:`,
+                        err,
+                    );
+                };
+                ws.onclose = () => {
+                    if (window.DEBUG)
+                        console.log(`Connection to ${relay} closed`);
+                };
+            });
+            return eventId;
+        }
+
+        function showVoting() {
+            document.querySelector(".vote-section").style.display = "block";
+            document.querySelector(".leaderboard-section").style.display =
+                "none";
+        }
+
+        function showLeaderboard() {
+            document.querySelector(".vote-section").style.display = "none";
+            document.querySelector(".leaderboard-section").style.display =
+                "block";
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            const leaderboardResults = document.getElementById(
+                "leaderboard-results",
+            );
+            while (leaderboardResults.firstChild) {
+                leaderboardResults.removeChild(
+                    leaderboardResults.lastChild,
+                );
+            }
+
+            tallied.forEach((tally, index) => {
+                const imageUrl = getImageFromEventByID(tally.eventId);
+                const row = document.createElement("tr");
+                row.innerHTML = `
                                                 <td>${index + 1}</td>
                                                 <td><img src="${imageUrl}" alt="Pepe ${index + 1}"></td>
                                                 <td>${tally.votecount}</td>
                                             `;
-                    leaderboardResults.appendChild(row);
+                leaderboardResults.appendChild(row);
+            });
+        }
+
+        // Wait for DOM to be fully loaded before running any scripts
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("hello the page has just loaded");
+
+            // Initialize buttons and event listeners
+            const loginBtn = document.getElementById("login-btn");
+            const voteOption1Btn =
+                document.getElementById("voteoption1-btn");
+            const voteOption2Btn =
+                document.getElementById("voteoption2-btn");
+
+            if (loginBtn) {
+                loginBtn.addEventListener("click", async () => {
+                    if (window.nostr) {
+                        console.log("window.nostr found");
+                        try {
+                            const pubKey =
+                                await window.nostr.getPublicKey();
+                            const profile = await fetchProfile(pubKey);
+                            if (profile.picture) {
+                                document.getElementById("profile-pic").src =
+                                    profile.picture;
+                                document.querySelector(
+                                    ".profile-pic-container",
+                                ).style.display = "block";
+                            }
+                            document.querySelector(
+                                ".vote-section",
+                            ).style.display = "block";
+                            document.querySelector(
+                                ".login-btn-container",
+                            ).style.display = "none";
+                            setupVoteOptions();
+                        } catch (error) {
+                            console.error("Login failed:", error);
+                            alert(
+                                "Failed to login with NIP-07. Please check your extension.",
+                            );
+                        }
+                    } else {
+                        alert(
+                            "NIP-07 extension is required to log in and vote.",
+                        );
+                        console.log("window.nostr NOT found");
+                    }
                 });
             }
 
-            // Wait for DOM to be fully loaded before running any scripts
-            document.addEventListener("DOMContentLoaded", function () {
-                console.log("hello the page has just loaded");
+            if (voteOption1Btn) {
+                voteOption1Btn.addEventListener("click", async () => {
+                    await voteNote(option1id, option2id);
+                    setupVoteOptions(); // Show new voting options after vote
+                });
+            }
 
-                // Initialize buttons and event listeners
-                const loginBtn = document.getElementById("login-btn");
-                const voteOption1Btn =
-                    document.getElementById("voteoption1-btn");
-                const voteOption2Btn =
-                    document.getElementById("voteoption2-btn");
+            if (voteOption2Btn) {
+                voteOption2Btn.addEventListener("click", async () => {
+                    await voteNote(option2id, option1id);
+                    setupVoteOptions(); // Show new voting options after vote
+                });
+            }
 
-                if (loginBtn) {
-                    loginBtn.addEventListener("click", async () => {
-                        if (window.nostr) {
-                            console.log("window.nostr found");
-                            try {
-                                const pubKey =
-                                    await window.nostr.getPublicKey();
-                                const profile = await fetchProfile(pubKey);
-                                if (profile.picture) {
-                                    document.getElementById("profile-pic").src =
-                                        profile.picture;
-                                    document.querySelector(
-                                        ".profile-pic-container",
-                                    ).style.display = "block";
-                                }
-                                document.querySelector(
-                                    ".vote-section",
-                                ).style.display = "block";
-                                document.querySelector(
-                                    ".login-btn-container",
-                                ).style.display = "none";
-                                setupVoteOptions();
-                            } catch (error) {
-                                console.error("Login failed:", error);
-                                alert(
-                                    "Failed to login with NIP-07. Please check your extension.",
-                                );
-                            }
-                        } else {
-                            alert(
-                                "NIP-07 extension is required to log in and vote.",
-                            );
-                            console.log("window.nostr NOT found");
-                        }
-                    });
-                }
+            // Add click handlers for navigation
+            document
+                .querySelector('a[onclick="showVoting()"]')
+                .addEventListener("click", (e) => {
+                    e.preventDefault();
+                    showVoting();
+                });
 
-                if (voteOption1Btn) {
-                    voteOption1Btn.addEventListener("click", async () => {
-                        await voteNote(option1id, option2id);
-                        setupVoteOptions(); // Show new voting options after vote
-                    });
-                }
+            document
+                .querySelector('a[onclick="showLeaderboard()"]')
+                .addEventListener("click", (e) => {
+                    e.preventDefault();
+                    showLeaderboard();
+                });
 
-                if (voteOption2Btn) {
-                    voteOption2Btn.addEventListener("click", async () => {
-                        await voteNote(option2id, option1id);
-                        setupVoteOptions(); // Show new voting options after vote
-                    });
-                }
-
-                // Add click handlers for navigation
-                document
-                    .querySelector('a[onclick="showVoting()"]')
-                    .addEventListener("click", (e) => {
-                        e.preventDefault();
-                        showVoting();
-                    });
-
-                document
-                    .querySelector('a[onclick="showLeaderboard()"]')
-                    .addEventListener("click", (e) => {
-                        e.preventDefault();
-                        showLeaderboard();
-                    });
-
-                // Initial data retrieval
-                setTimeout(() => {
-                    (async () => {
-                        await fetchTallySort();
-                        if (window.DEBUG) console.log(tallied);
-                    })();
-                }, 1700);
-
+            // Initial data retrieval
+            setTimeout(() => {
                 (async () => {
-                    availableOptions = await fetchOptions();
-                    console.log(availableOptions);
+                    await fetchTallySort();
+                    if (window.DEBUG) console.log(tallied);
                 })();
+            }, 1700);
 
-                // Set up periodic fetch
-                setInterval(() => {
-                    (async () => {
-                        await fetchTallySort();
-                        if (window.DEBUG) console.log(tallied);
-                    })();
-                }, 60000);
-            });
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/nostr-zap@1.1.0"></script>
-    </body>
+            (async () => {
+                availableOptions = await fetchOptions();
+                console.log(availableOptions);
+            })();
+
+            // Set up periodic fetch
+            setInterval(() => {
+                (async () => {
+                    await fetchTallySort();
+                    if (window.DEBUG) console.log(tallied);
+                })();
+            }, 60000);
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/nostr-zap@1.1.0"></script>
+</body>
+
 </html>
