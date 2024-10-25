@@ -331,143 +331,153 @@
                 });
             }
 
-            async function fetchOptions() {
-                return new Promise((resolve, reject) => {
-                    console.log("fetching options promise....");
-                    let options = [];
-                    let optionids = [];
-                    readRelays.forEach((relay) => {
-                        const ws = new WebSocket(relay);
-                        ws.onopen = () => {
-                            let filter = { kinds: [kindOption], limit: 5000 };
-                            ws.send(JSON.stringify(["REQ", "options", filter]));
-                        };
-                        ws.onmessage = (event) => {
-                            const message = JSON.parse(event.data);
-                            if (message[0] === "EVENT" && message.length >= 2) {
-                                let voteoption = message[2];
-                                if (!optionids.includes(voteoption.id)) {
-                                    let hasNamespace = false;
-                                    let hasLabel = false;
-                                    let hasHashtag = false;
-                                    for (let te of voteoption.tags) {
-                                        if (te.length < 2) continue;
-                                        if (te[0] == "L" && te[1] == namespace)
-                                            hasNamespace = true;
-                                        if (
-                                            te[0] == "l" &&
-                                            te[1] == namespaceOption
-                                        )
-                                            hasLabel = true;
-                                        if (te[0] == "t" && te[1] == tagFilter)
-                                            hasHashtag = true;
-                                    }
-                                    if (
-                                        hasNamespace &&
-                                        hasLabel &&
-                                        hasHashtag
-                                    ) {
-                                        options.push(voteoption);
-                                        optionids.push(voteoption.id);
-                                    }
-                                }
-                            }
-                            if (message[0] === "EOSE") {
-                                ws.send(JSON.stringify(["CLOSE", "options"]));
-                                ws.close();
-                            }
-                            if (message[0] == "NOTICE") {
-                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
-                            }
-                        };
-                        ws.onerror = (err) => {
-                            console.error(
-                                `Error fetching options from ${relay}:`,
-                                err,
-                            );
-                            reject(err);
-                        };
-                        ws.onclose = () => {
-                            if (window.DEBUG)
-                                console.log(`Closed connection to ${relay}`);
-                        };
-                    });
-                    setTimeout(() => {
-                        resolve(options);
-                    }, 2000);
-                });
-            }
 
-            async function fetchResults() {
-                return new Promise((resolve, reject) => {
-                    let results = [];
-                    let resultids = [];
-                    readRelays.forEach((relay) => {
-                        const ws = new WebSocket(relay);
-                        ws.onopen = () => {
-                            ws.send(
-                                JSON.stringify([
-                                    "REQ",
-                                    "results",
-                                    { kinds: [kindVote], limit: 5000 },
-                                ]),
-                            );
+            async function fetchNostrEvents({
+            subscriptionId,
+            kind,
+            pageSize = 10,
+            until = Math.floor(Date.now() / 1000),
+            since = undefined
+        } = {}) {
+            return new Promise((resolve, reject) => {
+                let events = [];
+                let eventids = [];
+                let completedRelays = 0;
+                const totalRelays = readRelays.length;
+
+                readRelays.forEach((relay) => {
+                    const ws = new WebSocket(relay);
+
+                    ws.onopen = () => {
+                        if (window.DEBUG) console.log(`Opening connection to ${relay} with until=${until}`);
+                        let filter = {
+                            kinds: [kind],
+                            until,
+                            limit: pageSize
                         };
-                        ws.onmessage = (event) => {
-                            const message = JSON.parse(event.data);
-                            if (message[0] === "EVENT" && message.length >= 2) {
-                                let result = message[2];
-                                if (!resultids.includes(result.id)) {
-                                    let hasNamespace = false;
-                                    let hasLabel = false;
-                                    let hasHashtag = false;
-                                    for (let te of result.tags) {
-                                        if (te.length < 2) continue;
-                                        if (te[0] == "L" && te[1] == namespace)
-                                            hasNamespace = true;
-                                        if (
-                                            te[0] == "l" &&
-                                            te[1] == namespaceOption
-                                        )
-                                            hasLabel = true;
-                                        if (te[0] == "t" && te[1] == tagFilter)
-                                            hasHashtag = true;
-                                    }
-                                    if (
-                                        hasNamespace &&
-                                        hasLabel &&
-                                        hasHashtag
-                                    ) {
-                                        results.push(result);
-                                        resultids.push(result.id);
-                                    }
+
+                        if (since) filter.since = since;
+
+                        ws.send(JSON.stringify(["REQ", subscriptionId, filter]));
+                    };
+
+                    ws.onmessage = (event) => {
+                        const message = JSON.parse(event.data);
+                        if (message[0] === "EVENT" && message.length >= 2) {
+                            let nostrEvent = message[2];
+
+                            if (!eventids.includes(nostrEvent.id)) {
+                                let hasNamespace = false;
+                                let hasLabel = false;
+                                let hasHashtag = false;
+
+                                for (let te of nostrEvent.tags) {
+                                    if (te.length < 2) continue;
+                                    if (te[0] == "L" && te[1] == namespace)
+                                        hasNamespace = true;
+                                    if (te[0] == "l" && te[1] == namespaceOption)
+                                        hasLabel = true;
+                                    if (te[0] == "t" && te[1] == tagFilter)
+                                        hasHashtag = true;
+                                }
+
+                                if (hasNamespace && hasLabel && hasHashtag) {
+                                    events.push(nostrEvent);
+                                    eventids.push(nostrEvent.id);
                                 }
                             }
-                            if (message[0] === "EOSE") {
-                                ws.send(JSON.stringify(["CLOSE", "results"]));
-                                ws.close();
+                        }
+
+                        if (message[0] === "EOSE") {
+                            if (window.DEBUG) console.log(`Received EOSE from ${relay}`);
+                            completedRelays++;
+                            if (completedRelays === totalRelays) {
+                                if (window.DEBUG) console.log('All relays completed, handling completion');
+                                handleCompletion();
                             }
-                            if (message[0] == "NOTICE") {
-                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
-                            }                            
-                        };
-                        ws.onerror = (err) => {
-                            console.error(
-                                `Error fetching results from ${relay}:`,
-                                err,
-                            );
-                            reject(err);
-                        };
-                        ws.onclose = () => {
-                            if (window.DEBUG)
-                                console.log(`Closed connection to ${relay}`);
-                        };
-                    });
-                    setTimeout(() => {
-                        resolve(results);
-                    }, 2000);
+                        }
+
+                        if (message[0] == "NOTICE") {
+                            if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
+                        }
+                    };
+
+                    ws.onerror = (err) => {
+                        console.error(
+                            `Error fetching from ${relay}:`,
+                            err,
+                        );
+                        completedRelays++;
+                        if (completedRelays === totalRelays) {
+                            handleCompletion();
+                        }
+                    };
+
+                    ws.onclose = () => {
+                        if (window.DEBUG)
+                            console.log(`Closed connection to ${relay}`);
+                    };
                 });
-            }
+
+                const handleCompletion = () => {
+                    // Sort by timestamp
+                    events.sort((a, b) => b.created_at - a.created_at);
+
+                    if (window.DEBUG) console.log(`Total events collected: ${events.length}`);
+
+                    // Close all connections after we've processed everything
+                    readRelays.forEach((relay) => {
+                        const ws = new WebSocket(relay);
+                        if (ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify(["CLOSE", subscriptionId]));
+                            ws.close();
+                        }
+                    });
+
+                    // Return all events we've collected
+                    resolve(events);
+                };
+
+                // Maintain the timeout as a fallback
+                setTimeout(() => {
+                    if (window.DEBUG) console.log('Timeout reached, handling completion');
+                    handleCompletion();
+                }, 2000);
+            });
+        }
+
+        async function fetchOptions({
+            pageSize = 500,
+            until = Math.floor(Date.now() / 1000)
+        } = {}) {
+            console.log(`Fetching options with until=${until}`);
+            const results = await fetchNostrEvents({
+                subscriptionId: "options",
+                kind: kindOption,
+                pageSize,
+                until
+            });
+            console.log(`Fetched ${results.length} options`);
+            return results;
+        }
+
+        async function fetchResults({
+            pageSize = 500,
+            until = Math.floor(Date.now() / 1000)
+        } = {}) {
+            const oneWeekAgo = Math.floor((Date.now() / 1000) - (7 * 24 * 60 * 60));
+
+            console.log(`Fetching results with until=${until}`);
+            const results = await fetchNostrEvents({
+                subscriptionId: "results",
+                kind: kindVote,
+                pageSize,
+                until,
+                since: oneWeekAgo
+            });
+            console.log(`Fetched ${results.length} results`);
+            return results;
+        }
 
             async function fetchTallySort() {
                 let currentResults = await fetchResults();
