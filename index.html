@@ -367,10 +367,7 @@
                                 ws.close();
                             }
                             if (message[0] == "NOTICE") {
-                                if (message.length > 1)
-                                    console.log(
-                                        `notice from ${relay}: ${JSON.stringif(message[1])}`,
-                                    );
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
                             }
                         };
                         ws.onerror = (err) => {
@@ -434,10 +431,7 @@
                                 ws.close();
                             }
                             if (message[0] == "NOTICE") {
-                                if (message.length > 1)
-                                    console.log(
-                                        `notice from ${relay}: ${JSON.stringif(message[1])}`,
-                                    );
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
                             }
                         };
                         ws.onerror = (err) => {
@@ -508,11 +502,8 @@
                                 ws.close();
                             }
                             if (message[0] == "NOTICE") {
-                                if (message.length > 1)
-                                    console.log(
-                                        `notice from ${relay}: ${JSON.stringif(message[1])}`,
-                                    );
-                            }
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
+                            }                            
                         };
                         ws.onerror = (err) => {
                             console.error(
@@ -675,11 +666,11 @@
                                 } catch (e) {
                                     // set a default image indicating logged in
                                     document.getElementById("profile-pic").src =
-                                        "https://cornychat.com/img/emojis/emoji-E4.png";
+                                    "https://cornychat.com/img/emojis/emoji-E4.png";
                                 }
                                 document.querySelector(
-                                    ".profile-pic-container",
-                                ).style.display = "block";
+                                        ".profile-pic-container",
+                                    ).style.display = "block";                                
                                 document.querySelector(
                                     ".vote-section",
                                 ).style.display = "block";
