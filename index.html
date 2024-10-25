@@ -228,7 +228,9 @@
             let availableOptions = [];
             let option1id = "";
             let option2id = "";
-            let brokenImageUrl = "broken";
+            let brokenImageUrl = "https://i.nostr.build/amWoHfhFGLzgscdr.png";
+            document.getElementById("voteoption1-btn").src = brokenImageUrl;
+            document.getElementById("voteoption2-btn").src = brokenImageUrl;
 
             function getImageFromEventByID(id) {
                 for (let o of availableOptions) {
@@ -310,6 +312,9 @@
                                 ws.send(JSON.stringify(["CLOSE", "profile"]));
                                 ws.close();
                             }
+                            if (message[0] == "NOTICE") {
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
+                            }
                         };
                         ws.onerror = (err) => {
                             console.error(
@@ -370,6 +375,9 @@
                             if (message[0] === "EOSE") {
                                 ws.send(JSON.stringify(["CLOSE", "options"]));
                                 ws.close();
+                            }
+                            if (message[0] == "NOTICE") {
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
                             }
                         };
                         ws.onerror = (err) => {
@@ -439,6 +447,9 @@
                                 ws.send(JSON.stringify(["CLOSE", "results"]));
                                 ws.close();
                             }
+                            if (message[0] == "NOTICE") {
+                                if (message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
+                            }                            
                         };
                         ws.onerror = (err) => {
                             console.error(
@@ -594,14 +605,18 @@
                             try {
                                 const pubKey =
                                     await window.nostr.getPublicKey();
-                                const profile = await fetchProfile(pubKey);
-                                if (profile.picture) {
+                                try {
+                                    const profile = await fetchProfile(pubKey);
                                     document.getElementById("profile-pic").src =
                                         profile.picture;
-                                    document.querySelector(
-                                        ".profile-pic-container",
-                                    ).style.display = "block";
+                                } catch (e) {
+                                    // set a default image indicating logged in
+                                    document.getElementById("profile-pic").src =
+                                    "https://cornychat.com/img/emojis/emoji-E4.png";
                                 }
+                                document.querySelector(
+                                        ".profile-pic-container",
+                                    ).style.display = "block";                                
                                 document.querySelector(
                                     ".vote-section",
                                 ).style.display = "block";
