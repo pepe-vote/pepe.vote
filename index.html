@@ -336,7 +336,7 @@
                     const ws = new WebSocket(relay);
 
                     ws.onopen = () => {
-                        console.log(`Opening connection to ${relay} with until=${until}`);
+                        if (window.DEBUG) console.log(`Opening connection to ${relay} with until=${until}`);
                         let filter = {
                             kinds: [kind],
                             until,
@@ -375,11 +375,15 @@
                             }
                         }
 
+                        if (message[0] == "NOTICE") {
+                            if (window.DEBUG && message.length > 1) console.log(`notice from ${relay}: ${JSON.stringif(message[1])}`);
+                        }
+
                         if (message[0] === "EOSE") {
-                            console.log(`Received EOSE from ${relay}`);
+                            if (window.DEBUG) console.log(`Received EOSE from ${relay}`);
                             completedRelays++;
                             if (completedRelays === totalRelays) {
-                                console.log('All relays completed, handling completion');
+                                if (window.DEBUG) console.log('All relays completed, handling completion');
                                 handleCompletion();
                             }
                         }
@@ -406,7 +410,7 @@
                     // Sort by timestamp
                     events.sort((a, b) => b.created_at - a.created_at);
 
-                    console.log(`Total events collected: ${events.length}`);
+                    if (window.DEBUG) console.log(`Total events collected: ${events.length}`);
 
                     // Close all connections after we've processed everything
                     readRelays.forEach((relay) => {
@@ -423,7 +427,7 @@
 
                 // Maintain the timeout as a fallback
                 setTimeout(() => {
-                    console.log('Timeout reached, handling completion');
+                    if (window.DEBUG) console.log('Timeout reached, handling completion');
                     handleCompletion();
                 }, 2000);
             });
